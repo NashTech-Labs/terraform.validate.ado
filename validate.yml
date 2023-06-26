@@ -1,0 +1,45 @@
+parameters:
+- name: 'workingDirectory'
+  type: string
+  default: ''
+
+- name: 'initbackend'
+  type: string
+  default: ''
+
+- name: ProjectName
+  type: string
+  default: "Testing"
+
+- name: 'workspace'
+  type: string
+  default: ''
+
+- name: 'provider'
+  type: string
+  default: 'azuerm'
+
+- name: 'ServiceConnectionNameAzureRM'
+  type: string
+  default: ''
+
+steps:
+
+- script: |
+    terraform validate
+  workingDirectory: '${{ parameters.workingDirectory}}'
+  displayName: "Validate Terraform Configuration Using TF Workspace for ${{ parameters.ProjectName }}"
+  name: "TerraformValidateTFworkspace"
+  condition: eq( ${{ parameters.initbackend }}, 'tfworkspace')
+  env:
+    TF_WORKSPACE: "${{ parameters.workspace}}"
+
+- task: TerraformTaskV4@4
+  displayName: "Validate Terraform Configuration Using Azure Backend for ${{ parameters.ProjectName }}"
+  name: "TerraformValidateAzure"
+  condition: eq( ${{ parameters.initbackend }}, 'azure')
+  inputs:
+    provider: ${{ parameters.provider }}
+    command: 'validate'
+    environmentServiceNameAzureRM: ${{ parameters.ServiceConnectionNameAzureRM }}
+    workingDirectory: '${{ parameters.workingDirectory }}'
