@@ -34,9 +34,7 @@ Paramaters:
   These parameters provide configuration options for the Terraform Module Package pipeline, such as the Terraform Module Package version, build configuration name and enable/disable flags for different stages.
 
 ## Use Case
-You can directly call a paticular template as per the requirement. for example: to use setup and init only.
 
- 
 
   ```yaml
   # azure-pipeline.yml
@@ -44,9 +42,9 @@ You can directly call a paticular template as per the requirement. for example: 
     repositories:
       - repository: TerraformTemplate
         type: github
-        name: duck-creek/ADO.Pipelines.Templates
+        name: your_username/terraform.validate.ado
         ref: <respective branch name>
-        endpoint: 'Duck Creek'
+        endpoint: 'githubServiceConnectioNname'
 
  
 
@@ -54,23 +52,11 @@ You can directly call a paticular template as per the requirement. for example: 
 
  
 
-  - template: frameWork/terraform/actions/templates/setup.yml@TerraformTemplate
+  - template: validate.yml@TerraformTemplate
     parameters:
       terraformVersion: ${{ parameters.terraformVersion }}
       ProjectName: ${{ parameters.ProjectName }}
 
  
-
-  - template: frameWork/terraform/actions/templates/azure/init.yml@Terraform
-    parameters:
-      backendServiceArm: 'adwf-tf-adju-o'
-      backendAzureRmResourceGroupName: 'insights' 
-      backendAzureRmStorageAccountName: 'tfstateaccount' 
-      backendAzureRmContainerName: 'tfstatecontainer' 
-      backendAzureRmKey: 'adf_infra-test-templating.tfstate'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/deployment/Terraform'
-      initbackend: '${{ parameters.initbackend }}'
-      provider: 'azurerm'
-      ProjectName: ${{ parameters.ProjectName }}
-  ```
+    ```
 
